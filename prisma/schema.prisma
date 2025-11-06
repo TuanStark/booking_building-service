@@ -1,0 +1,35 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  // output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Building {
+  id          String   @id @default(uuid())
+  name        String
+  address     String
+  images      String?
+  city        String?
+  country     String?
+  description String?
+  longtitude  String?
+  latitude    String?
+  imagePublicId String? @map("image_public_id")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // events is optional - used for audit
+  roomsCount  Int      @default(0)
+
+  @@map("building")
+}
