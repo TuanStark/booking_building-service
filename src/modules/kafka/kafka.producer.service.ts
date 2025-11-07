@@ -13,7 +13,10 @@ export class KafkaProducerService implements OnModuleInit {
       // Chỉ connect để sử dụng producer, không subscribe vì Building Service chỉ GỬI events
       await this.kafkaClient.connect();
     } catch (error) {
-      console.warn('⚠️ Kafka not available, skipping producer setup:', error.message);
+      console.warn(
+        '⚠️ Kafka not available, skipping producer setup:',
+        error.message,
+      );
     }
   }
 

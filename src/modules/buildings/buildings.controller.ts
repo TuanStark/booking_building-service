@@ -22,7 +22,7 @@ import { FindAllDto } from 'src/common/global/find-all.dto';
 
 @Controller('buildings')
 export class BuildingController {
-  constructor(private readonly buildingService: BuildingService) { }
+  constructor(private readonly buildingService: BuildingService) {}
 
   @Post()
   @UseInterceptors(FileInterceptor('file'))
@@ -34,8 +34,15 @@ export class BuildingController {
       if (!file) {
         throw new BadRequestException('file is required');
       }
-      const building = await this.buildingService.create(createBuildingDto, file);
-      return new ResponseData(building, HttpStatus.ACCEPTED, HttpMessage.SUCCESS);
+      const building = await this.buildingService.create(
+        createBuildingDto,
+        file,
+      );
+      return new ResponseData(
+        building,
+        HttpStatus.ACCEPTED,
+        HttpMessage.SUCCESS,
+      );
     } catch (error) {
       return new ResponseData(
         null,
@@ -51,7 +58,11 @@ export class BuildingController {
       const building = await this.buildingService.findAll(query);
       return new ResponseData(building, HttpStatus.OK, HttpMessage.SUCCESS);
     } catch (error) {
-      return new ResponseData(null, HttpStatus.INTERNAL_SERVER_ERROR, HttpMessage.SERVER_ERROR);
+      return new ResponseData(
+        null,
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        HttpMessage.SERVER_ERROR,
+      );
     }
   }
 
@@ -61,7 +72,11 @@ export class BuildingController {
       const building = await this.buildingService.findOne(id);
       return new ResponseData(building, HttpStatus.OK, HttpMessage.SUCCESS);
     } catch (error) {
-      return new ResponseData(null, HttpStatus.INTERNAL_SERVER_ERROR, HttpMessage.SERVER_ERROR);
+      return new ResponseData(
+        null,
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        HttpMessage.SERVER_ERROR,
+      );
     }
   }
 
@@ -76,7 +91,11 @@ export class BuildingController {
       const building = await this.buildingService.update(id, dto, file);
       return new ResponseData(building, HttpStatus.OK, HttpMessage.SUCCESS);
     } catch (error) {
-      return new ResponseData(null, HttpStatus.INTERNAL_SERVER_ERROR, HttpMessage.SERVER_ERROR);
+      return new ResponseData(
+        null,
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        HttpMessage.SERVER_ERROR,
+      );
     }
   }
 
@@ -86,7 +105,11 @@ export class BuildingController {
       const building = await this.buildingService.remove(id);
       return new ResponseData(building, HttpStatus.OK, HttpMessage.SUCCESS);
     } catch (error) {
-      return new ResponseData(null, HttpStatus.INTERNAL_SERVER_ERROR, HttpMessage.SERVER_ERROR);
+      return new ResponseData(
+        null,
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        HttpMessage.SERVER_ERROR,
+      );
     }
   }
 }

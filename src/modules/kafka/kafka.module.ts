@@ -12,8 +12,12 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
           transport: Transport.KAFKA,
           options: {
             client: {
-              clientId: configService.get<string>('KAFKA_CLIENT_ID') || 'building-service',
-              brokers: configService.get<string>('KAFKA_BROKER')?.split(',') || ['localhost:9092'],
+              clientId:
+                configService.get<string>('KAFKA_CLIENT_ID') ||
+                'building-service',
+              brokers: configService
+                .get<string>('KAFKA_BROKER')
+                ?.split(',') || ['localhost:9092'],
               retry: {
                 retries: 3,
                 initialRetryTime: 100,

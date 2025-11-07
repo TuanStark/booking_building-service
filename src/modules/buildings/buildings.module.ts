@@ -8,7 +8,6 @@ import { PrismaModule } from 'src/prisma/prisma.module';
 import { UploadService } from 'src/utils/uploads.service';
 import { KafkaModule } from '../kafka/kafka.module';
 
-
 @Module({
   imports: [
     PrismaModule,
@@ -27,4 +26,4 @@ import { KafkaModule } from '../kafka/kafka.module';
   controllers: [BuildingController],
   providers: [BuildingService, PrismaService, UploadService],
 })
-export class BuildingsModule { }
+export class BuildingsModule {}

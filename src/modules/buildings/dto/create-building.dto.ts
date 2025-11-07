@@ -1,35 +1,34 @@
-import { IsOptional, IsString, MaxLength } from "class-validator";
-
+import { IsOptional, IsString, MaxLength } from 'class-validator';
 
 export class CreateBuildingDto {
-    @IsString()
-    @MaxLength(200)
-    name: string;
+  @IsString()
+  @MaxLength(200)
+  name: string;
 
-    @IsString()
-    @MaxLength(200)
-    address: string;
+  @IsString()
+  @MaxLength(200)
+  address: string;
 
-    @IsString()
-    @IsOptional()
-    @MaxLength(200)
-    images?: string;
+  @IsString()
+  @IsOptional()
+  @MaxLength(200)
+  images?: string;
 
-    @IsOptional()
-    city?: string;
+  @IsOptional()
+  city?: string;
 
-    @IsOptional()
-    longtitude?: string;
+  @IsOptional()
+  longtitude?: string;
 
-    @IsOptional()
-    latitude?: string;
+  @IsOptional()
+  latitude?: string;
 
-    @IsOptional()
-    country?: string;
+  @IsOptional()
+  country?: string;
 
-    @IsOptional()
-    description?: string;
+  @IsOptional()
+  description?: string;
 
-    @IsOptional()
-    imagePublicId: string;
+  @IsOptional()
+  imagePublicId: string;
 }

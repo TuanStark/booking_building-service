@@ -9,7 +9,7 @@ import { FindAllDto } from 'src/common/global/find-all.dto';
 @Injectable()
 export class BuildingService {
   constructor(
-    private prisma: PrismaService, 
+    private prisma: PrismaService,
     private kafkaProducer: KafkaProducerService,
     private readonly uploadService: UploadService,
   ) {}
@@ -17,7 +17,8 @@ export class BuildingService {
   async create(dto: CreateBuildingDto, file: Express.Multer.File) {
     try {
       // Upload ảnh sang upload-service
-      const { imageUrl, imagePublicId } = await this.uploadService.uploadImage(file);
+      const { imageUrl, imagePublicId } =
+        await this.uploadService.uploadImage(file);
 
       // Lưu vào database
       const building = await this.prisma.building.create({
@@ -47,7 +48,7 @@ export class BuildingService {
       limit = 10,
       search = '',
       sortBy = 'createdAt',
-      sortOrder = 'desc'
+      sortOrder = 'desc',
     } = query;
 
     const pageNumber = Number(page);
@@ -63,14 +64,14 @@ export class BuildingService {
     const searchUpCase = search.charAt(0).toUpperCase() + search.slice(1);
     const where = search
       ? {
-        OR: [
-          { name: { contains: searchUpCase } },
-          { address: { contains: searchUpCase } },
-        ]
-      }
+          OR: [
+            { name: { contains: searchUpCase } },
+            { address: { contains: searchUpCase } },
+          ],
+        }
       : {};
     const orderBy = {
-      [sortBy]: sortOrder
+      [sortBy]: sortOrder,
     };
 
     const [buildings, total] = await Promise.all([
@@ -82,8 +83,8 @@ export class BuildingService {
       }),
       this.prisma.building.count({
         where: where,
-      })
-    ])
+      }),
+    ]);
 
     return {
       data: buildings,
@@ -108,24 +109,24 @@ export class BuildingService {
       const existing = await this.prisma.building.findUnique({
         where: { id },
       });
-  
+
       if (!existing) {
         throw new HttpException(`Building not found`, 404);
       }
-  
+
       let url = existing.images;
       let public_id = existing.imagePublicId;
-  
+
       if (file) {
         // Upload ảnh mới
-        const { imageUrl, imagePublicId } = await this.uploadService.uploadImage(file);
+        const { imageUrl, imagePublicId } =
+          await this.uploadService.uploadImage(file);
         url = imageUrl;
         public_id = imagePublicId;
 
         // TODO: Xoá ảnh cũ nếu cần (upload-service chưa expose DELETE endpoint)
-
       }
-  
+
       const building = await this.prisma.building.update({
         where: { id },
         data: {
@@ -134,10 +135,10 @@ export class BuildingService {
           imagePublicId: public_id,
         },
       });
-  
+
       // Emit Kafka event
       await this.kafkaProducer.emitBuildingUpdatedEvent(building);
-  
+
       return building;
     } catch (error: any) {
       throw new HttpException(
@@ -146,7 +147,7 @@ export class BuildingService {
       );
     }
   }
-  
+
   async remove(id: string) {
     await this.prisma.building.delete({ where: { id } });
     await this.kafkaProducer.emitBuildingDeletedEvent({ id });
