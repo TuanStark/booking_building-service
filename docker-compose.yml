@@ -17,8 +17,7 @@ services:
       CLOUDINARY_CLOUD_NAME: ${CLOUDINARY_CLOUD_NAME}
       CLOUDINARY_API_KEY: ${CLOUDINARY_API_KEY}
       CLOUDINARY_API_SECRET: ${CLOUDINARY_API_SECRET}
-      UPLOAD_SERVICE_URL: ${UPLOAD_SERVICE_URL}
-      NODE_ENV: ${NODE_ENV}
+      UPLOAD_SERVICE_URL: http://upload-service:3009/api
     volumes:
       - .:/app
       - /app/node_modules
