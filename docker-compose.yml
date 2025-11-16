@@ -5,11 +5,13 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: building-service-dev
+      target: production  # Đảm bảo Dockerfile có stage production
+    container_name: building-service-prod
     ports:
       - "3002:3002"
     environment:
       PORT: 3002
+      NODE_ENV: production
       DATABASE_URL: ${DATABASE_URL}
       KAFKA_BROKER: ${KAFKA_BROKER}
       KAFKA_CLIENT_ID: ${KAFKA_CLIENT_ID}
@@ -17,16 +19,24 @@ services:
       CLOUDINARY_CLOUD_NAME: ${CLOUDINARY_CLOUD_NAME}
       CLOUDINARY_API_KEY: ${CLOUDINARY_API_KEY}
       CLOUDINARY_API_SECRET: ${CLOUDINARY_API_SECRET}
-      UPLOAD_SERVICE_URL: http://upload-service:3009/api
+      UPLOAD_SERVICE_URL: ${UPLOAD_SERVICE_URL}
     volumes:
-      - .:/app
+      # Không mount source code trong production
+      # Chỉ giữ lại nếu cần log hoặc file tạm
       - /app/node_modules
-    command: sh -c "npx prisma generate && npm run start:dev"
+    user: node  # Chạy với user non-root (bảo mật)
+    command: ["node", "dist/main"]  # Chạy file đã build
+    restart: unless-stopped  # Tự động restart nếu crash
     networks:
       my_custom_network:
         ipv4_address: ${APP_IP}
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3002/health"]  # Thay /health bằng endpoint thực tế
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
 
 networks:
   my_custom_network:
     external: true
-
