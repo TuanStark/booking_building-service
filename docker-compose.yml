@@ -25,7 +25,7 @@ services:
       # Chỉ giữ lại nếu cần log hoặc file tạm
       - /app/node_modules
     user: node  # Chạy với user non-root (bảo mật)
-    command: ["node", "dist/main"]  # Chạy file đã build
+    command: sh -c "npx prisma migrate deploy && node dist/main"
     restart: unless-stopped  # Tự động restart nếu crash
     networks:
       my_custom_network:
