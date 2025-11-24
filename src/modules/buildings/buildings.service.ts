@@ -12,21 +12,27 @@ export class BuildingService {
     private prisma: PrismaService,
     private kafkaProducer: KafkaProducerService,
     private readonly uploadService: UploadService,
-  ) {}
+  ) { }
 
-  async create(dto: CreateBuildingDto, file: Express.Multer.File) {
+  async create(dto: CreateBuildingDto, file?: Express.Multer.File) {
     try {
-      // Upload ảnh sang upload-service
-      const { imageUrl, imagePublicId } =
-        await this.uploadService.uploadImage(file);
+      let imageUrl = null;
+      let imagePublicId = null;
+
+      // Chỉ upload ảnh nếu có file
+      if (file) {
+        const uploadResult = await this.uploadService.uploadImage(file);
+        imageUrl = uploadResult.imageUrl;
+        imagePublicId = uploadResult.imagePublicId;
+      }
 
       // Lưu vào database
       const building = await this.prisma.building.create({
         data: {
           name: dto.name,
           address: dto.address,
-          images: imageUrl, // Lưu URL duy nhất
-          imagePublicId: imagePublicId, // Lưu public_id để xoá/update ảnh sau này
+          images: imageUrl, // Có thể null nếu không có file
+          imagePublicId: imagePublicId, // Có thể null nếu không có file
         },
       });
 
@@ -64,11 +70,11 @@ export class BuildingService {
     const searchUpCase = search.charAt(0).toUpperCase() + search.slice(1);
     const where = search
       ? {
-          OR: [
-            { name: { contains: searchUpCase } },
-            { address: { contains: searchUpCase } },
-          ],
-        }
+        OR: [
+          { name: { contains: searchUpCase } },
+          { address: { contains: searchUpCase } },
+        ],
+      }
       : {};
     const orderBy = {
       [sortBy]: sortOrder,

@@ -6,20 +6,11 @@ services:
       context: .
       dockerfile: Dockerfile
       target: production  # Đảm bảo Dockerfile có stage production
-    container_name: building-service-prod
+    container_name: building-service
     ports:
       - "3002:3002"
-    environment:
-      PORT: 3002
-      NODE_ENV: production
-      DATABASE_URL: ${DATABASE_URL}
-      KAFKA_BROKER: ${KAFKA_BROKER}
-      KAFKA_CLIENT_ID: ${KAFKA_CLIENT_ID}
-      KAFKA_GROUP_ID: ${KAFKA_GROUP_ID}
-      CLOUDINARY_CLOUD_NAME: ${CLOUDINARY_CLOUD_NAME}
-      CLOUDINARY_API_KEY: ${CLOUDINARY_API_KEY}
-      CLOUDINARY_API_SECRET: ${CLOUDINARY_API_SECRET}
-      UPLOAD_SERVICE_URL: ${UPLOAD_SERVICE_URL}
+    env_file:
+      - .env
     volumes:
       # Không mount source code trong production
       # Chỉ giữ lại nếu cần log hoặc file tạm

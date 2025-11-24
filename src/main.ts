@@ -5,13 +5,10 @@ import { ValidationPipe } from '@nestjs/common';
 import { json, urlencoded } from 'express';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, {
-    bodyParser: false, // Tắt body parser mặc định để tự cấu hình
-  });
+  const app = await NestFactory.create(AppModule);
 
-  // Cấu hình body parser với giới hạn 100MB để hỗ trợ upload file ảnh lớn
-  app.use(json({ limit: '100mb' }));
-  app.use(urlencoded({ extended: true, limit: '100mb' }));
+  // NestJS will handle body parsing automatically, including multipart/form-data
+  // when using FileInterceptor in controllers
 
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
   app.use(helmet());
