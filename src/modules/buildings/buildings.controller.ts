@@ -18,7 +18,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { BuildingService } from './buildings.service';
 import { ResponseData } from 'src/common/global/globalClass';
 import { HttpMessage } from 'src/common/global/globalEnum';
-import { FindAllDto } from 'src/common/global/find-all.dto';
+import { FindAllBuildingDto } from './dto/find-all.dto';
 
 @Controller('buildings')
 export class BuildingController {
@@ -53,7 +53,7 @@ export class BuildingController {
   }
 
   @Get()
-  async findAll(@Query() query: FindAllDto) {
+  async findAll(@Query() query: FindAllBuildingDto) {
     try {
       const building = await this.buildingService.findAll(query);
       return new ResponseData(building, HttpStatus.OK, HttpMessage.SUCCESS);

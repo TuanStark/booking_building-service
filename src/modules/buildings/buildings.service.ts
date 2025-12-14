@@ -4,7 +4,7 @@ import { UpdateBuildingDto } from './dto/update-building.dto';
 import { KafkaProducerService } from '../kafka/kafka.producer.service';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { UploadService } from 'src/utils/uploads.service';
-import { FindAllDto } from 'src/common/global/find-all.dto';
+import { FindAllBuildingDto } from './dto/find-all.dto';
 
 @Injectable()
 export class BuildingService {
@@ -48,7 +48,7 @@ export class BuildingService {
     }
   }
 
-  async findAll(query: FindAllDto) {
+  async findAll(query: FindAllBuildingDto) {
     const {
       page = 1,
       limit = 10,
