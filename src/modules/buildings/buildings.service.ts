@@ -21,7 +21,8 @@ export class BuildingService {
     if (!geocodingResult) {
       throw new BadRequestException('Geocoding failed');
     }
-    console.log(geocodingResult);
+    const { latitude, longtitude } = geocodingResult.location;
+    console.log(latitude, longtitude);
     try {
       let imageUrl = null;
       let imagePublicId = null;
@@ -38,8 +39,11 @@ export class BuildingService {
         data: {
           name: dto.name,
           address: dto.address,
-          latitude: geocodingResult?.location.latitude,
-          longtitude: geocodingResult?.location.longtitude,
+          latitude: latitude?.toString(),
+          longtitude: longtitude?.toString(),
+          city: dto.city,
+          country: dto.country,
+          description: dto.description,
           images: imageUrl, // Có thể null nếu không có file
           imagePublicId: imagePublicId, // Có thể null nếu không có file
         },

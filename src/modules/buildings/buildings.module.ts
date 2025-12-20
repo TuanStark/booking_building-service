@@ -7,11 +7,13 @@ import { memoryStorage } from 'multer';
 import { PrismaModule } from 'src/prisma/prisma.module';
 import { UploadService } from 'src/utils/uploads.service';
 import { KafkaModule } from '../kafka/kafka.module';
+import { GeocodingModule } from '../geocoding/geocoding.module';
 
 @Module({
   imports: [
     PrismaModule,
     KafkaModule,
+    GeocodingModule,
     MulterModule.register({
       storage: memoryStorage(),
       fileFilter: (req, file, cb) => {
