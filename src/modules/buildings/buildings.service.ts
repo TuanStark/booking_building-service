@@ -1,10 +1,11 @@
-import { HttpException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, HttpException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateBuildingDto } from './dto/create-building.dto';
 import { UpdateBuildingDto } from './dto/update-building.dto';
 import { KafkaProducerService } from '../kafka/kafka.producer.service';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { UploadService } from 'src/utils/uploads.service';
 import { FindAllBuildingDto } from './dto/find-all.dto';
+import { GeocodingService } from '../geocoding/geocoding.service';
 
 @Injectable()
 export class BuildingService {
@@ -12,9 +13,15 @@ export class BuildingService {
     private prisma: PrismaService,
     private kafkaProducer: KafkaProducerService,
     private readonly uploadService: UploadService,
+    private readonly geocodingService: GeocodingService,
   ) { }
 
   async create(dto: CreateBuildingDto, file?: Express.Multer.File) {
+    const geocodingResult = await this.geocodingService.geocodeAddress({ address: dto.address });
+    if (!geocodingResult) {
+      throw new BadRequestException('Geocoding failed');
+    }
+    console.log(geocodingResult);
     try {
       let imageUrl = null;
       let imagePublicId = null;
@@ -31,6 +38,8 @@ export class BuildingService {
         data: {
           name: dto.name,
           address: dto.address,
+          latitude: geocodingResult?.location.latitude,
+          longtitude: geocodingResult?.location.longtitude,
           images: imageUrl, // Có thể null nếu không có file
           imagePublicId: imagePublicId, // Có thể null nếu không có file
         },

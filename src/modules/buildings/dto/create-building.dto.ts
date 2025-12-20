@@ -18,12 +18,6 @@ export class CreateBuildingDto {
   city?: string;
 
   @IsOptional()
-  longtitude?: string;
-
-  @IsOptional()
-  latitude?: string;
-
-  @IsOptional()
   country?: string;
 
   @IsOptional()

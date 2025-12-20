@@ -4,6 +4,7 @@ import { ConfigModule } from '@nestjs/config';
 import { BuildingsModule } from './modules/buildings/buildings.module';
 import { PrismaService } from 'nestjs-prisma';
 import { KafkaModule } from './modules/kafka/kafka.module';
+import { GeocodingModule } from './modules/geocoding/geocoding.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { KafkaModule } from './modules/kafka/kafka.module';
     PrismaModule,
     BuildingsModule,
     KafkaModule,
+    GeocodingModule,
   ],
   controllers: [],
   providers: [PrismaService],
